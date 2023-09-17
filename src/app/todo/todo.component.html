@@ -1,0 +1,118 @@
+<div class="flex flex-col items-center h-screen">
+  <div class="w-full border-black space-y-4">
+    <form [formGroup]="todoForm">
+      <mat-form-field
+        appearance="fill"
+        class="w-full p-4 md:p-6 text-xl md:text-2xl rounded-lg shadow-lg outline-none bg-white pr-12"
+      >
+        <input
+          formControlName="item"
+          matInput
+          placeholder="What Do You Want To Do"
+        />
+        <button
+          *ngIf="!isEditEnable"
+          (click)="addTask()"
+          class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center"
+        >
+          +
+        </button>
+        <button
+          *ngIf="isEditEnable"
+          (click)="updateTask()"
+          class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
+
+    <div
+      cdkDropListGroup
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+    >
+      <div class="bg-blue-100 rounded-lg p-4 min-h-[50rem]">
+        <h2 class="text-2xl font-bold mb-4 text-blue-800">To Do</h2>
+        <div
+          cdkDropList
+          [cdkDropListData]="tasks"
+          class="border-dashed border-2 border-blue-400 rounded-lg p-4 space-y-4 min-h-[20rem]"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div
+            class="bg-white rounded-lg p-4 shadow-md cursor-move flex items-center justify-between border-black border-2"
+            cdkDrag
+            *ngFor="let item of tasks; let i = index"
+          >
+            <span class="text-lg">{{ item.description }}</span>
+            <div>
+              <button
+                mat-icon-button
+                class="text-blue-500 hover:text-blue-600"
+                (click)="deleteTask(i)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="text-blue-500 hover:text-blue-600"
+                (click)="onEdit(item, i)"
+                style="margin-left: 8px"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-yellow-100 rounded-lg p-4 min-h-[50rem]">
+        <h2 class="text-2xl font-bold mb-4 text-yellow-800">Process</h2>
+        <div
+          cdkDropList
+          [cdkDropListData]="inprogress"
+          class="border-dashed border-2 border-blue-400 rounded-lg p-4 space-y-4 min-h-[20rem]"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div
+            class="bg-white rounded-lg p-4 shadow-md cursor-move flex items-center justify-between"
+            cdkDrag
+            *ngFor="let item of inprogress; let i = index"
+          >
+            <span class="text-lg">{{ item.description }}</span>
+            <button
+              class="text-red-500 hover:text-red-600"
+              (click)="deleteInProgressTask(i)"
+            >
+              &#10005;
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-green-100 rounded-lg p-4 min-h-[50rem]">
+        <h2 class="text-2xl font-bold mb-4 text-green-800">Done</h2>
+        <div
+          cdkDropList
+          [cdkDropListData]="done"
+          class="border-dashed border-2 border-blue-400 rounded-lg p-4 space-y-4 min-h-[20rem]"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div
+            class="bg-white rounded-lg p-4 shadow-md cursor-move flex items-center justify-between"
+            cdkDrag
+            *ngFor="let item of done; let i = index"
+          >
+            <span class="text-lg">{{ item.description }}</span>
+            <button
+              class="text-red-500 hover:text-red-600"
+              (click)="deleteDoneTask(i)"
+            >
+              &#10005;
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
